@@ -8,4 +8,4 @@ import {
   Link
 } from "react-router-dom";
 
-ReactDOM.render(<h1>Welcome</h1>, document.getElementById('app'));
+ReactDOM.render(<h1>First app</h1>, document.getElementById('app'));
