@@ -1,10 +1,22 @@
-import React from 'react'
+import React from 'react';
+import Navbar from "#root/components/layouts/Navbar/";
+import Footer from "#root/components/layouts/Footer/";
+import ErroPagerContent from "#root/components/layouts/ErroPagerContent/";
+import {useCompanyContext, useNavbarContext} from '#root/context/';
 
 const ErrorPage = () => {
+
+    const {name} = useCompanyContext();
+    const {navState} = useNavbarContext();
+
+    document.title = `Error 404 | ${name}`;
+
     return (
-        <div>
-            sorry 404
-        </div>
+        <>
+            <Navbar />
+            <Footer />
+            <ErroPagerContent displayProp={navState}  />
+        </>
     )
 }
 

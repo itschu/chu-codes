@@ -102,7 +102,7 @@ const Title = styled(Link)`
 
 const Navbar = () => {
 
-    const navIcons = [<RiPencilRuler2Line />, <RiProfileLine />, <RiContactsFill/>]
+    const navIcons = [<RiProfileLine />, <RiPencilRuler2Line />, <RiContactsFill/>]
     const {navState, toggleNav} = useNavbarContext();
 
     return (

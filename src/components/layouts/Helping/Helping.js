@@ -85,14 +85,25 @@ const ViewSite = styled.a`
     padding: 22px 0;
     width: 30em;
     text-align: center;
+    border-radius: 10px;
     font-weight: 500;
+    box-shadow: 0 0.6em 0.87em 0 hsl(323deg 0% 40%);
     background-color: ${props=> props.bg};
     color: ${props=> props.color};
     margin: 15px;
-
+    transition: transform 0.4s ease;
+    
     @media (max-width: 600px){
         width: 21em;
+        &:hover, &:focus{
+            transform: scale(1.05);
+        }
     }
+
+    &:hover, &:focus{
+        transform: scale(1.15);
+    }
+    
 `;
 
 const Helping = () => {

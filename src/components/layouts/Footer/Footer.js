@@ -102,13 +102,13 @@ const Footer = () => {
             </NameLogo>
 
             <div className="socials">
-                <Socials>
+                <Socials href="https://www.facebook.com/joseph.chu.98031" target="_blank">
                     <FaFacebookF />
                 </Socials>
-                <Socials>
+                <Socials href="mailto:palmerbideconcepts@gmail.com" >
                     <GrMail />
                 </Socials>
-                <Socials>
+                <Socials href="tel:08151248495">
                     <OutCall />
                 </Socials>
             </div>

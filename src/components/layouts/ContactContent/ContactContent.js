@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import Heading from '#root/components/layouts/Heading';
-import CTA, {ctaTemplate} from '#root/components/layouts/CTA';
+import {ctaTemplate} from '#root/components/layouts/CTA';
 import {useNavbarContext} from '#root/context/';
+
 
 const color_red = "#ffa5a5";
 const color_green = "#66ffb2";
@@ -75,49 +76,55 @@ const Left = styled.div`
     align-items: center;
 `;
 
-const Right = styled.div`
-
-`;
+const Right = styled.div``;
 
 const NameInput = styled.input`
     ${baseInputStyle};
     grid-area: n;
-    ${({error}) => (
-        error ? `
+    ${({error, showError}) => { 
+        if(showError === false){
+            return error ? `
             border: 2px solid ${color_green};
         `: `border: 2px solid ${color_red}`
-    )};
+        }
+    }}; 
 `;
 
 const MessageInput = styled.textarea`
     ${baseInputStyle};
     grid-area: m;
     min-height: 10em;
-    ${({error}) => (
-        error ? `
+    ${({error, showError}) => { 
+        if(showError === false){
+            return error ? `
             border: 2px solid ${color_green};
         `: `border: 2px solid ${color_red}`
-    )};
+        }
+    }}; 
 `;
 
 const SubjectInput = styled.input`
     ${baseInputStyle};
     grid-area: s;
-    ${({error}) => (
-        error ? `
+    ${({error, showError}) => { 
+        if(showError === false){
+            return error ? `
             border: 2px solid ${color_green};
         `: `border: 2px solid ${color_red}`
-    )};
+        }
+    }}; 
 `;
 
 const EmailInput = styled.input`
     ${baseInputStyle};
     grid-area: e;
-    ${({error}) => (
-        error ? `
+    ${({error, showError}) => { 
+        if(showError === false){
+            return error ? `
             border: 2px solid ${color_green};
         `: `border: 2px solid ${color_red}`
-    )};
+        }
+    }}; 
 `;
 
 const ContactSignPara = styled.p`
@@ -138,7 +145,7 @@ const ContactSubmit = styled.button`
 
 const Warning = styled.p`
     font-size: clamp(0.869rem, 1.8vw, 1.07rem);
-    background-color: #ffa5a5;
+    background-color: ${({errorColor}) => errorColor !== 'All fields are required' ? "#2fd07f" : color_red };
     font-weight: 600;
     color: white;
     padding: 1.07em;
@@ -160,32 +167,39 @@ const ContactContent = () => {
     const submitForm = e => {
         
         e.preventDefault();
-        details.subject || setReady(false);
-        details.message || setReady(false);
-        details.name || setReady(false);
-        details.email || setReady(false);
-        validateEmail(details.email) || setReady(false);
-        if(ready){
+        if(subject && message && name && validateEmail(email)){
             console.log("next step");
+        }else{
+            setHideError(false);
         }
     }
-
-    useEffect(() => {
-        setReady(true);
-    }, []);
 
     const [subject, setSubject] = useState(''); 
     const [message, setMessage] = useState(''); 
     const [name, setName] = useState(''); 
     const [email, setEmail] = useState('');
-    const [ready, setReady] = useState(false);
-
-    const details = {
-        subject, message, name, email,
-    }
+    const [hideError, setHideError] = useState(true);
+    const [userMessage, setUserMessage] = useState('All fields are required');
+    
     const setInput = (e, fn) => {
         fn(e.target.value);
     }
+
+    useEffect(() => {
+        if(subject && message && name && validateEmail(email)){
+            setUserMessage("All fields are complete");
+        }else{
+            setUserMessage("All fields are required");
+        }
+    });
+
+    useEffect(() => {
+        if(subject && message && name && validateEmail(email)){
+            setUserMessage("All fields are complete");
+        }else{
+            setUserMessage("All fields are required");
+        }
+    });
 
     const {navState} = useNavbarContext();
 
@@ -193,20 +207,20 @@ const ContactContent = () => {
 
         <MainContent displayProp={navState}>
             <Left>
-                {ready || <Warning> All fields are required</Warning>}
+                {hideError || <Warning errorColor={userMessage} > {userMessage} </Warning>}
                 <ContactSignPara hideProp="none">
                     Est reprehenderit cillum in culpa. Consequat laborum ipsum laborum nulla Lorem irure et quis culpa sunt esse laboris. Est reprehenderit cillum in culpa. Consequat laborumt cillum in culpa. Consequat laborum ipsum laborum nulla Lorem irure et quis  esse laboris.
                 </ContactSignPara>
 
                 <ContactForm action="/" method="post" id="contact">
 
-                    <SubjectInput type="text" placeholder="Subject" value={subject} onChange={e=>setInput(e, setSubject)} required="" error={subject} />
+                    <SubjectInput type="text" placeholder="Subject" value={subject} onChange={e=>setInput(e, setSubject)} required="" error={subject} showError={hideError} />
 
-                    <MessageInput placeholder="Your Message" value={message} onChange={e=>setInput(e, setMessage)} required="" error={message} />
+                    <MessageInput placeholder="Your Message" value={message} onChange={e=>setInput(e, setMessage)} required="" error={message} showError={hideError}  />
 
-                    <NameInput type="text" placeholder="Your name" value={name} onChange={e=>setInput(e, setName)} required="" error={name} />
+                    <NameInput type="text" placeholder="Your name" value={name} onChange={e=>setInput(e, setName)} required="" error={name} showError={hideError}  />
 
-                    <EmailInput type="email" placeholder="Your email" value={email} onChange={e=>setInput(e, setEmail)} required="" error={validateEmail(email)} />
+                    <EmailInput type="email" placeholder="Your email" value={email} onChange={e=>setInput(e, setEmail)} required="" error={validateEmail(email)} showError={hideError}  />
 
                 </ContactForm>
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Heading from '#root/components/layouts/Heading';
-import CTA from '#root/components/layouts/CTA';
+import {ctaTemplate} from '#root/components/layouts/CTA';
 import {allJobs} from "#root/data";
 import {Link} from 'react-router-dom';
 import {useNavbarContext} from '#root/context/';
@@ -48,7 +48,10 @@ const ViewWorks = styled.div`
 `;
 
 const Works = styled.div`
-    
+    margin-bottom: 4.5em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 `;
 
 const Para = styled.p`
@@ -61,7 +64,7 @@ const Para = styled.p`
 
 const Cell = styled.a`
     background-color: ${props=>props.bg};
-    background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.8)), url(${props=>props.bgImg}) no-repeat center center;
+    background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.8)), url(${props=>props.bgImg}) no-repeat;
     background-position: center;
     background-size: cover;
     color: ${props=>props.color};
@@ -125,6 +128,11 @@ const Cell = styled.a`
     }
 `;
 
+const WorkCTA = styled(Link)`
+    ${ctaTemplate};
+    color: white;
+    font-weight: 600;
+`
 
 const WorkContent = () => {
 
@@ -132,25 +140,30 @@ const WorkContent = () => {
 
     return (
         <MainContent displayProp={navState}>
-                <ViewWorks>
-                    {
-                        allJobs.map(el=> (
-                            <Cell bg={el.bgColor} color={el.color} href={el.link} key={el.id} target="_blank" bgImg={el.bgImg}>
 
-                                {el.title}
+            <ViewWorks>
+                {
+                    allJobs.map(el=> (
+                        <Cell bg={el.bgColor} color={el.color} href={el.link} key={el.id} target="_blank" bgImg={el.bgImg}>
 
-                            </Cell>
-                        ))
-                    }
-                </ViewWorks>
+                            {el.title}
 
-                <Works>
-                    <Heading  before="<" after=" />" content="our work" align="center" color="#fff" />
+                        </Cell>
+                    ))
+                }
+            </ViewWorks>
+            
+            <Works>
+                <Heading  before="<" after=" />" content="our work" align="center" color="#fff" />
 
-                    <Para>
-                        Dolor veniam est reprehenderit irure minim culpa. Pariatur nulla sunt esse qui exercitation culpa anim id sit nisi id irure. Aliqua labore exercitation aute aliquip enim nostrud aute. 
-                    </Para>
-                </Works>
+                <Para>
+                    Dolor veniam est reprehenderit irure minim culpa. Pariatur nulla sunt esse qui exercitation culpa anim id sit nisi id irure. Aliqua labore exercitation aute aliquip enim nostrud aute. 
+                </Para>
+
+                <WorkCTA to="/contact">
+                    Get In Touch
+                </WorkCTA>
+            </Works>
         </MainContent>
     )
 }
