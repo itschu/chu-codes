@@ -24,7 +24,7 @@ const Nav = styled.nav`
 
     @media (max-width: 600px) {
         width: 100vw;
-        height: 10vw;
+        height: 15vw;
         background-color: #000;
         flex-direction: row;
         align-items: center;

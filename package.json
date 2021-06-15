@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "parcel src/index.html"
+    "start": "parcel src/index.html --open",
+    "build": "parcel build src/index.html"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,8 @@
     "parcel-bundler": "^1.12.5"
   },
   "dependencies": {
+    "axios": "^0.21.1",
+    "cors": "^2.8.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.2.0",
@@ -32,5 +35,8 @@
   },
   "alias": {
     "#root": "./src"
-  }
+  },
+  "browserslist": [
+    "since 2017-06"
+  ]
 }

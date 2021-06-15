@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import Heading from '#root/components/layouts/Heading';
 import {ctaTemplate} from '#root/components/layouts/CTA';
 import {useNavbarContext} from '#root/context/';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 
 const color_red = "#ffa5a5";
@@ -32,7 +34,7 @@ const MainContent = styled.section`
     padding-right: 4em;
     display: grid;
     grid-gap: 2em;
-    grid-template-columns: 6fr 4fr;
+    grid-template-columns: ${({grid})=> grid ? grid : '6fr 4fr'};
     place-items: center;
     transition: padding-left 0.19s ease-in-out;
 
@@ -150,9 +152,41 @@ const Warning = styled.p`
     color: white;
     padding: 1.07em;
     text-align: center;
-    width: 100%;
+    width: 60%;
     margin-bottom: 1.68em;
     border-radius: 10px;
+
+    @media(max-width: 1000px){
+        width: 100%;
+    }
+`;
+
+const Lin = styled(Link)`
+    text-decoration: none;
+    /* color: #fff; */
+    font-size: clamp(0.869rem, 1.8vw, 1.07rem);
+`;
+
+const Loader = styled.div`
+
+    border: 10px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 10px solid #dcdcdc;
+    border-bottom: 10px solid #dcdcdc;
+
+    margin: 0 20px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+
+    @-webkit-keyframes spin {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
 `;
 
 const validateEmail = (email) => {
@@ -162,13 +196,44 @@ const validateEmail = (email) => {
     return re.test(email);
 }
 
+const sendData = async (data) =>{
+    try {
+        const res = await axios.post('https://nameless-anchorage-40130.herokuapp.com/api/v1/data/new', data);
+        const {data:{ok}} = res;
+        return ok;
+    } catch (error) {
+        console.log(`${error}`);
+        return(false);
+    }
+}
+
+const SuccessMessage = styled.div`
+
+`;
+
 const ContactContent = () => {
     
-    const submitForm = e => {
-        
+    const submitForm = async e => {
         e.preventDefault();
         if(subject && message && name && validateEmail(email)){
-            console.log("next step");
+            // console.log("next step");
+            const myMsg = {
+                subject,
+                message,
+                name,
+                email,
+                isEmail: true,
+            };
+            e.target.setAttribute('disabled', true);
+            setButtonMsg(<Loader />);
+            const result = await sendData(myMsg);
+            if (result) {
+                setMessageSent(<Warning> Thank you for contacting us! <br /> We would get in touch with you shortly. via mail<br></br>
+                <Lin to='/'>Go Home</Lin>
+                </Warning>)
+            }else{
+               setMessageSent(<Warning errorColor="All fields are required"> Sorry! <br /> An error occured please try again later.</Warning>)
+            }
         }else{
             setHideError(false);
         }
@@ -180,7 +245,9 @@ const ContactContent = () => {
     const [email, setEmail] = useState('');
     const [hideError, setHideError] = useState(true);
     const [userMessage, setUserMessage] = useState('All fields are required');
-    
+    const [messageSent, setMessageSent] = useState();
+    const [buttonMsg, setButtonMsg] = useState('Send Message');
+
     const setInput = (e, fn) => {
         fn(e.target.value);
     }
@@ -204,40 +271,42 @@ const ContactContent = () => {
     const {navState} = useNavbarContext();
 
     return (
+        <MainContent displayProp={navState} grid={messageSent && '1fr'}>                    
+            { messageSent ||
+                <>
+                    <Left>
+                        {hideError || <Warning errorColor={userMessage} > {userMessage} </Warning>}
+                        <ContactSignPara hideProp="none">
+                            Est reprehenderit cillum in culpa. Consequat laborum ipsum laborum nulla Lorem irure et quis culpa sunt esse laboris. Est reprehenderit cillum in culpa. Consequat laborumt cillum in culpa. Consequat laborum ipsum laborum nulla Lorem irure et quis  esse laboris.
+                        </ContactSignPara>
 
-        <MainContent displayProp={navState}>
-            <Left>
-                {hideError || <Warning errorColor={userMessage} > {userMessage} </Warning>}
-                <ContactSignPara hideProp="none">
-                    Est reprehenderit cillum in culpa. Consequat laborum ipsum laborum nulla Lorem irure et quis culpa sunt esse laboris. Est reprehenderit cillum in culpa. Consequat laborumt cillum in culpa. Consequat laborum ipsum laborum nulla Lorem irure et quis  esse laboris.
-                </ContactSignPara>
+                        <ContactForm action="/" method="post" id="contact">
 
-                <ContactForm action="/" method="post" id="contact">
+                            <SubjectInput type="text" placeholder="Subject" value={subject} onChange={e=>setInput(e, setSubject)} required="" error={subject} showError={hideError} />
 
-                    <SubjectInput type="text" placeholder="Subject" value={subject} onChange={e=>setInput(e, setSubject)} required="" error={subject} showError={hideError} />
+                            <MessageInput placeholder="Your Message" value={message} onChange={e=>setInput(e, setMessage)} required="" error={message} showError={hideError}  />
 
-                    <MessageInput placeholder="Your Message" value={message} onChange={e=>setInput(e, setMessage)} required="" error={message} showError={hideError}  />
+                            <NameInput type="text" placeholder="Your name" value={name} onChange={e=>setInput(e, setName)} required="" error={name} showError={hideError}  />
 
-                    <NameInput type="text" placeholder="Your name" value={name} onChange={e=>setInput(e, setName)} required="" error={name} showError={hideError}  />
+                            <EmailInput type="email" placeholder="Your email" value={email} onChange={e=>setInput(e, setEmail)} required="" error={validateEmail(email)} showError={hideError}  />
 
-                    <EmailInput type="email" placeholder="Your email" value={email} onChange={e=>setInput(e, setEmail)} required="" error={validateEmail(email)} showError={hideError}  />
+                        </ContactForm>
 
-                </ContactForm>
+                        <ContactSubmit type="submit" onClick={(e)=>submitForm(e)} >
+                            {buttonMsg}
+                        </ContactSubmit>
+                    </Left>
 
-                <ContactSubmit type="submit" onClick={(e)=>submitForm(e)} >
-                    Send Message
-                </ContactSubmit>
-            </Left>
-
-            <Right>
-                <Heading  before="<" after=" />" content="contact us" align="center" />
-                <ContactSignPara>
-                    Est reprehenderit cillum in culpa. Consequat laborum ipsum laborum nulla Lorem irure!!
-                </ContactSignPara>
-                <br />
-                <br />
-            </Right> 
-
+                    <Right>
+                        <Heading  before="<" after=" />" content="contact us" align="center" />
+                        <ContactSignPara>
+                            Est reprehenderit cillum in culpa. Consequat laborum ipsum laborum nulla Lorem irure!!
+                        </ContactSignPara>
+                        <br />
+                        <br />
+                    </Right> 
+                </>
+            }
         </MainContent>
     )
 }
