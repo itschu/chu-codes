@@ -1,43 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link
-            href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-            rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@100;200;300;400;500;600;700;800;900&display=swap"
-            rel="stylesheet">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" href="images/logo-white.png" type="image/png" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Catamaran:wght@100;200;300;400;500;600;700;800;900&display=swap"
+			rel="stylesheet"
+		/>
+		<meta
+			name="description"
+			content="Tech Chu is an website and mobile app development agency."
+		/>
 
-        <title>Chu Codes</title>
-    </head>
-    <body>
-        <div id="app"></div>
-        <script src="./index.js"></script>
-        <script>    
-            let oh = document.querySelector('.circle.oh')
+		<title>Tech Chu | Technology solution for your businness</title>
+	</head>
+	<body>
+		<div id="app"></div>
+		<script src="./index.js"></script>
+		<script>
+			let oh = document.querySelector(".circle.oh");
 
-            if(oh){
-                document.addEventListener('mousemove', event => {
-                    let domainX = [0, document.body.clientWidth],
-                        domainY = [0, document.body.clientHeight],
-                        range = [-10, 10]
+			if (oh) {
+				document.addEventListener("mousemove", (event) => {
+					let domainX = [0, document.body.clientWidth],
+						domainY = [0, document.body.clientHeight],
+						range = [-10, 10];
 
-                    let translate = {
-                        x: range[0] + (event.clientX - domainX[0]) * (range[1] - range[0]) / (domainX[1] - domainX[0]),
-                        y: range[0] + (event.clientY - domainY[0]) * (range[1] - range[0]) / (domainY[1] - domainY[0])
-                    }
+					let translate = {
+						x:
+							range[0] +
+							((event.clientX - domainX[0]) * (range[1] - range[0])) /
+								(domainX[1] - domainX[0]),
+						y:
+							range[0] +
+							((event.clientY - domainY[0]) * (range[1] - range[0])) /
+								(domainY[1] - domainY[0]),
+					};
 
-                    oh.style.animation = 'none'
-                    oh.style.transform = `translate(${translate.x}px, ${translate.y}px)`
-                })
+					oh.style.animation = "none";
+					oh.style.transform = `translate(${translate.x}px, ${translate.y}px)`;
+				});
 
-                document.addEventListener('mouseleave', event => {
-                    oh.style.animation = 'floating 3s linear infinite'
-                })
-            }
-        </script>
-    </body>
+				document.addEventListener("mouseleave", (event) => {
+					oh.style.animation = "floating 3s linear infinite";
+				});
+			}
+		</script>
+	</body>
 </html>
