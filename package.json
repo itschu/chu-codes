@@ -36,5 +36,8 @@
 	},
 	"browserslist": [
 		"since 2017-06"
-	]
+	],
+	"devDependencies": {
+		"parcel-bundler": "^1.12.5"
+	}
 }
